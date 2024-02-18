@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Select Tab</title>
+</head>
+<body>
+    <ul>
+        {% for tab in tabs %}
+        <li><a href="#" onclick="selectTab('{{ tab }}')">{{ tab }}</a></li>
+        {% endfor %}
+    </ul>
+    <script src="https://cdn.socket.io/4.0.0/socket.io.min.js"></script>
+    <script>
+        var socket = io.connect(location.protocol + '//' + document.domain + ':' + location.port);
+        function selectTab(filename) {
+            socket.emit('select_tab', {filename: filename});
+        }
+    </script>
+</body>
+</html>
