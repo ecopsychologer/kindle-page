@@ -19,6 +19,10 @@ def list_tabs():
     tabs = os.listdir('tabs/')
     return render_template('list_tabs.html', tabs=tabs)
 
+@app.route('/pdf-viewer')
+def pdf_viewer():
+    return render_template('pdf_viewer.html')
+
 @app.route('/tabs/<filename>')
 def tab_file(filename):
     return send_from_directory('tabs', filename)
