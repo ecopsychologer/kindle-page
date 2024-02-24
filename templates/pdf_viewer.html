@@ -2,15 +2,12 @@
 <html>
 <head>
     <title>PDF Viewer</title>
-    <!-- Adjusted paths to be absolute from the root URL, assuming Flask's default static file serving -->
-    <script type="module" src="/static/assets/pdf.js/web/viewer.mjs"></script>
-    <link rel="stylesheet" href="/static/assets/pdf.js/web/viewer.css">
 </head>
 <body>
     <div id="pdf-canvas-container"></div>
-    <!-- Ensure the src path is correct for your setup; it might be /build/pdf.js based on your structure -->
+    <!-- Include PDF.js library -->
     <script type="module" src="/static/assets/pdf.js/build/pdf.mjs"></script>
-    <!-- Adjusted the path for your custom JavaScript -->
+    <!-- Include your custom script as a module if it needs to import from pdf.mjs -->
     <script type="module" src="/static/js/pdf-load-render.js"></script>
 </body>
 </html>

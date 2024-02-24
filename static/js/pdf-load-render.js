@@ -1,3 +1,22 @@
+import { getDocument } from '/static/assets/pdf.js/build/pdf.mjs';
+
+const url = '/static/assets/pdf/song1.pdf'; // Update this to the path of your PDF file
+
+let pdfDoc = null,
+    pageNum = 1;
+
+async function renderPage(num) {
+    const pdfDoc = await getDocument(url).promise;
+    const page = await pdfDoc.getPage(num);
+    // Add the rest of your rendering logic here
+}
+
+// Initialize and render the first page
+renderPage(pageNum);
+
+// Include your navigation logic here
+
+/* 
 //const url = '../assets/pdf/song1.pdf'; // Path to your PDF file
 const url = '/static/assets/pdf/song1.pdf'; // Make sure this path is correct
 
@@ -45,7 +64,7 @@ function queueRenderPage(num) {
         renderPage(pageNum);
     }
 }
-
+*/
 // Key event for navigation
 document.addEventListener('keydown', (event) => {
     if (event.key === 'p') {
