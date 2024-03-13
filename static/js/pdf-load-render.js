@@ -1,61 +1,41 @@
+// pdf-load-render.js
 import { getDocument } from '/static/assets/pdf.js/build/pdf.mjs';
 
-const url = '/static/assets/pdf/song1.pdf'; // Update this to the path of your PDF file
-
-let pdfDoc = null,
-    pageNum = 1;
-
-async function renderPage(num) {
-    const pdfDoc = await getDocument(url).promise;
-    const page = await pdfDoc.getPage(num);
-    // Add the rest of your rendering logic here
-}
-
-// Initialize and render the first page
-renderPage(pageNum);
-
-// Include your navigation logic here
-
-/* 
-//const url = '../assets/pdf/song1.pdf'; // Path to your PDF file
-const url = '/static/assets/pdf/song1.pdf'; // Make sure this path is correct
+const url = '/static/assets/pdf/song1.pdf'; // Path to your PDF file
 
 let pdfDoc = null,
     pageNum = 1,
-    scale = 1.5, // Adjust scale as needed for your display
-    canvasContainer = document.getElementById('pdf-canvas-container'),
-    currentPageRender = null;
+    scale = 1.5; // Adjust scale as needed for your display
 
-// Asynchronously downloads PDF.
-pdfjsLib.getDocument(url).promise.then(function(pdfDoc_) {
-    pdfDoc = pdfDoc_;
-    renderPage(pageNum);
+// Load and render the first page when the document is fully loaded
+document.addEventListener('DOMContentLoaded', async () => {
+    try {
+        pdfDoc = await getDocument(url).promise;
+        renderPage(pageNum);
+    } catch (error) {
+        console.error("Error loading PDF: ", error);
+    }
 });
 
-function renderPage(num) {
-    // Ensure the previous page render is cancelled before starting a new one
-    if (currentPageRender) {
-        currentPageRender.cancel();
-    }
+async function renderPage(num) {
+    const page = await pdfDoc.getPage(num);
+    const viewport = page.getViewport({ scale: scale });
+    const canvas = document.createElement('canvas');
+    const context = canvas.getContext('2d');
+    canvas.height = viewport.height;
+    canvas.width = viewport.width;
+    
+    // Ensure the canvas container is empty before appending a new canvas
+    const canvasContainer = document.getElementById('pdf-canvas-container');
+    canvasContainer.innerHTML = '';
+    canvasContainer.appendChild(canvas);
 
-    pdfDoc.getPage(num).then(function(page) {
-        var viewport = page.getViewport({scale: scale});
-        var canvas = document.createElement('canvas');
-        var ctx = canvas.getContext('2d');
-        var renderContext = {
-            canvasContext: ctx,
-            viewport: viewport
-        };
-
-        canvas.height = viewport.height;
-        canvas.width = viewport.width;
-        canvasContainer.appendChild(canvas);
-
-        currentPageRender = page.render(renderContext);
-        currentPageRender.promise.then(function() {
-            console.log(`Page ${num} rendered`);
-        });
-    });
+    const renderContext = {
+        canvasContext: context,
+        viewport: viewport,
+    };
+    await page.render(renderContext).promise;
+    console.log(`Page ${num} rendered`);
 }
 
 function queueRenderPage(num) {
@@ -64,12 +44,16 @@ function queueRenderPage(num) {
         renderPage(pageNum);
     }
 }
-*/
+
 // Key event for navigation
 document.addEventListener('keydown', (event) => {
     if (event.key === 'p') {
-        queueRenderPage(pageNum + 1);
+        if (pageNum < pdfDoc.numPages) {
+            queueRenderPage(pageNum + 1);
+        }
     } else if (event.key === 'o') {
-        queueRenderPage(pageNum - 1);
+        if (pageNum > 1) {
+            queueRenderPage(pageNum - 1);
+        }
     }
 });
