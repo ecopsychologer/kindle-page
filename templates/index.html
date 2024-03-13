@@ -1,12 +1,25 @@
 <!DOCTYPE html>
-<html>
+<html Lang="en">
 <head>
     <title>Live Update Demo</title>
-    <script src="https://cdn.socket.io/4.0.0/socket.io.min.js"></script>
-    <script src="{{ url_for('static', filename='js/app.js') }}"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        canvas{
+            border: 1px solid #000
+        }
+    </style>
 </head>
 <body>
-    <div id="pdf-canvas-container"></div>
-    <div id="content">Waiting for updates...</div>
+    <button id="prev">Prev</button>
+    <button id="next">Next</button>
+    <span id="npages">not yet</span>
+    <div>
+        <canvas id="cnv"></canvas>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.4.456/pdf.min.js"></script>
+    <script src="./app.js"></script>
 </body>
 </html>
